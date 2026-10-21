@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#11110f">
+  <title>Carillon</title>
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">C</div><div><strong>CARILLON</strong><small>INSTRUMENT AUDIO</small></div></div>
+      <div class="side-label">MENU GŁÓWNE</div>
+      <nav>
+        <button class="nav active" data-page="instrument"><span>♫</span> Carillon</button>
+        <button class="nav" data-page="settings"><span>⚙</span> Ustawienia</button>
+        <button class="nav" data-page="recordings"><span>◉</span> Nagrania <i id="recordCount">0</i></button>
+        <button class="nav" data-page="info"><span>ⓘ</span> Informacje</button>
+      </nav>
+      <div class="sidebar-bottom"><span class="status-dot"></span> AUDIO READY <small>v0.1.0</small></div>
+    </aside>
+    <main>
+      <header><div><div class="eyebrow">INSTRUMENT WIRTUALNY</div><h1 id="pageTitle">Carillon</h1></div><div class="header-right"><span class="live-dot"></span><span id="audioStatus">Gotowy do gry</span></div></header>
+      <section class="page" id="instrumentPage">
+        <div class="welcome panel">
+          <div><div class="eyebrow gold">TWOJE BRZMIENIE</div><h2>Każda nuta ma swój głos.</h2><p>Załaduj próbkę C3 i graj z klawiatury komputera albo kontrolera MIDI.</p></div>
+          <div class="sample-box"><div class="sample-icon">♫</div><div class="sample-info"><strong id="sampleName">Nie wczytano próbki</strong><small id="sampleMeta">Wybierz swój plik C3.mp3</small></div><label class="btn btn-gold file-button">Wczytaj C3<input id="sampleInput" type="file" accept="audio/*"></label></div>
+        </div>
+        <div class="toolbar panel">
+          <div><span class="eyebrow">STEROWANIE</span><strong id="octaveLabel">Oktawa 3</strong></div>
+          <div class="toolbar-actions"><button id="octDown" class="btn">− Oktawa</button><button id="octUp" class="btn">+ Oktawa</button><label class="volume">Głośność <input id="volume" type="range" min="0" max="100" value="75"><b id="volumeValue">75%</b></label></div>
+        </div>
+        <div class="keyboard-panel panel">
+          <div class="keyboard-head"><div><span class="eyebrow">KLAWIATURA</span><h3>Wybierz nutę</h3></div><span class="hint">Kliknij klawisz lub użyj MIDI</span></div>
+          <div class="keyboard" id="keyboard"></div>
+          <div class="note-readout"><span class="eyebrow">OSTATNIA NUTA</span><strong id="lastNote">—</strong><span id="lastNoteDetail">Oczekiwanie na dźwięk</span></div>
+        </div>
+        <div class="bottom-grid">
+          <div class="panel mini-panel"><div class="mini-title"><span class="mini-icon">⌁</span><div><strong>Kontroler MIDI</strong><small id="midiStatus">Sprawdzanie obsługi MIDI…</small></div></div><button class="btn" id="midiConnect">Połącz MIDI</button></div>
+          <div class="panel mini-panel"><div class="mini-title"><span class="mini-icon">●</span><div><strong>Sesja nagrania</strong><small id="recordStatus">Gotowy do nagrywania</small></div></div><div class="record-actions"><button class="btn btn-record" id="recordStart">● Nagraj</button><button class="btn" id="recordStop" disabled>■ Stop</button></div></div>
+        </div>
+      </section>
+      <section class="page hidden" id="settingsPage">
+        <div class="panel content-panel"><div class="eyebrow gold">KONFIGURACJA</div><h2>Ustawienia</h2><p class="muted">Ustawienia są zapisywane lokalnie w tej aplikacji.</p>
+          <div class="setting-row"><div><strong>Głośność główna</strong><small>Poziom odtwarzania dźwięku</small></div><input id="volume2" type="range" min="0" max="100" value="75"></div>
+          <div class="setting-row"><div><strong>Próbka bazowa</strong><small>Wczytaj dźwięk C3, z którego utworzymy pozostałe wysokości.</small></div><label class="btn btn-gold file-button">Wybierz plik<input id="sampleInput2" type="file" accept="audio/*"></label></div>
+          <div class="setting-row"><div><strong>Urządzenia MIDI</strong><small id="settingsMidi">Nie połączono kontrolera.</small></div><button class="btn" id="midiConnect2">Szukaj MIDI</button></div>
+          <div class="setting-row"><div><strong>Klawiatura komputera</strong><small>Rząd A–Ł / Z–M uruchamia nuty w wybranej oktawie.</small></div><span class="pill">Włączona</span></div>
+        </div>
+      </section>
+      <section class="page hidden" id="recordingsPage">
+        <div class="panel content-panel"><div class="eyebrow gold">TWOJA MUZYKA</div><h2>Nagrania</h2><p class="muted">Nagrania są przechowywane lokalnie w tej przeglądarce/profilu aplikacji. Możesz je odsłuchać, pobrać lub usunąć.</p><div id="recordingsList" class="recordings-list"><div class="empty-state">Nie masz jeszcze nagrań. Kliknij „Nagraj”, aby rozpocząć.</div></div></div>
+      </section>
+      <section class="page hidden" id="infoPage">
+        <div class="panel content-panel"><div class="eyebrow gold">O PROGRAMIE</div><h2>Carillon</h2><p>Wirtualny instrument oparty na Twojej próbce dźwięku C3.</p><div class="info-grid"><div><small>WERSJA</small><strong>0.1.0</strong></div><div><small>PLATFORMA</small><strong>Windows 10 / 11</strong></div><div><small>DŹWIĘK</small><strong>Próbka użytkownika</strong></div><div><small>STEROWANIE</small><strong>Klawiatura + MIDI</strong></div></div><p class="muted">Pierwsze uruchomienie</p><button class="btn" id="showTerms">Pokaż informacje i zgodę</button></div>
+      </section>
+      <footer>CARILLON <span>•</span> WERSJA 0.1.0 <span class="footer-right">DŹWIĘK JEST ZAPISYWANY LOKALNIE</span></footer>
+    </main>
+  </div>
+  <div class="modal hidden" id="termsModal"><div class="modal-card"><div class="brand-mark">C</div><div class="eyebrow gold">WITAJ W CARILLON</div><h2>Twoje brzmienie. Twoja muzyka.</h2><p>Załaduj próbkę C3, aby rozpocząć grę. Program może korzystać z kontrolera MIDI oraz zapisywać nagrania na tym urządzeniu. Pliki audio pozostają lokalne, chyba że samodzielnie je wyeksportujesz.</p><p class="muted">To wczesna wersja programu. Dźwięki inne niż C3 są tworzone z próbki bazowej; jakość może różnić się od nagrań wykonanych osobno dla każdej nuty.</p><button id="acceptTerms" class="btn btn-gold full">Akceptuję i zaczynam</button></div></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
