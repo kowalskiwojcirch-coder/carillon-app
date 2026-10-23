@@ -1,54 +1,32 @@
 name: Build Carillon for Windows
-
 on:
   workflow_dispatch:
   push:
-    branches: [main, master]
-    paths:
-      - 'package.json'
-      - 'index.html'
-      - 'vite.config.js'
-      - 'src/**'
-      - 'src-tauri/**'
-      - '.github/workflows/build-windows.yml'
-
-permissions:
-  contents: read
-
+    branches: [main]
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Pobierz kod
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Skonfiguruj Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - name: Skonfiguruj Rust
+      - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
-      - name: Zainstaluj zależności frontendu
+        with:
+          targets: x86_64-pc-windows-msvc
+      - name: Install dependencies
         run: npm install
-      - name: Zbuduj aplikację Windows
+      - name: Build app
         run: npm run tauri:build
-      - name: Zbierz instalatory
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path output | Out-Null
-          $paths = @(
-            "src-tauri/target/release/bundle/nsis/*.exe",
-            "src-tauri/target/release/bundle/msi/*.msi"
-          )
-          foreach ($pattern in $paths) {
-            Get-ChildItem $pattern -ErrorAction SilentlyContinue | Copy-Item -Destination output
-          }
-          if (-not (Get-ChildItem output -File)) {
-            Write-Error "Nie znaleziono instalatora. Sprawdź logi kroku budowania."
-          }
-      - name: Udostępnij instalator
+      - name: Upload Windows installers
         uses: actions/upload-artifact@v4
         with:
-          name: Carillon-Windows-Installer
-          path: output/*
+          name: Carillon-Windows
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
           if-no-files-found: error
